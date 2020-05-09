@@ -5,3 +5,4 @@ jmgtext/__pycache__/
 tests/__pycache__/
 dist/
 jmgtext.egg-info/
+jmgtext/crope/__pycache__/
