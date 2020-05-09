@@ -3,7 +3,7 @@
 
 #include "util.h"
 
-typedef struct {
+typedef struct Rope {
     struct Rope *left;
     struct Rope *right;
     char *text;
@@ -11,7 +11,7 @@ typedef struct {
     int len;
 } Rope, *Rope_p;
 
-typedef struct {
+typedef struct Rope_tuple {
     Rope_p left;
     Rope_p right;
 } Rope_tuple, *Rope_tuple_p;
