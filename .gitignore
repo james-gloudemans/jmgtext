@@ -6,3 +6,5 @@ tests/__pycache__/
 dist/
 jmgtext.egg-info/
 jmgtext/crope/__pycache__/
+jmgtext/crope/lib/*.o
+jmgtext/crope/lib/_*

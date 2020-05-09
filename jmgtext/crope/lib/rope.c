@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include <util.h>
-#include <rope.h>
+#include "util.h"
+#include "rope.h"
 
 Rope_p new_rope()
 {// Create a new empty rope.
@@ -16,6 +16,7 @@ Rope_p new_rope()
 void free_rope(Rope_p rope)
 {// Destroy the rope.
     // How to traverse?
+    return;
 }
 
 void free_rope_node(Rope_p rope)

@@ -1,7 +1,7 @@
 #ifndef ROPE_H
 #define ROPE_H
 
-#include <util.h>
+#include "util.h"
 
 typedef struct {
     struct Rope *left;
@@ -35,7 +35,7 @@ int rope_len(Rope_p rope);
 UTIL_BOOL_t is_rope_empty(Rope_p rope);
 
 // Get the character at position i in the rope
-char getchar(Rope_p rope, int i);
+char rope_getchar(Rope_p rope, int i);
 
 // Does the rope contain character c?
 UTIL_BOOL_t rope_contains(Rope_p rope, char c);

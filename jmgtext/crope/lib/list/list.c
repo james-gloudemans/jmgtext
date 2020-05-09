@@ -5,7 +5,7 @@
 LIST_NODE_p_t create_list_node(void *data, size_t size)
 {/* Construct and return a new list node */
     UTIL_ASSERT(data != NULL);
-    LIST_NODE_p_t new_list_node = UTIL_NEW(LIST_NODE_p_t);
+    LIST_NODE_p_t new_list_node = UTIL_NEW(LIST_NODE_t);
     new_list_node->next = new_list_node;
     new_list_node->prev = new_list_node;
 
