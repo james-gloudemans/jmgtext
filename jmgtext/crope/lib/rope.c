@@ -15,8 +15,11 @@ Rope_p new_rope()
 
 void free_rope(Rope_p rope)
 {// Destroy the rope.
-    // How to traverse?
-    return;
+    if(rope->left != NULL)
+        free_rope(rope->left);
+    if(rope->right != NULL)
+        free_rope(rope->right);
+    free_rope_node(rope);
 }
 
 void free_rope_node(Rope_p rope)
