@@ -21,7 +21,7 @@ typedef struct {
 } Rope_tuple, *Rope_tuple_p;
 
 // Create a new empty Rope
-Rope_p new_rope();
+Rope_p new_rope(char *text);
 
 // Destroy the Rope
 void free_rope(Rope_p rope);

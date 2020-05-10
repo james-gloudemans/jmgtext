@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "util.h"
 #include "rope.h"
 
@@ -9,7 +11,11 @@ Rope_p new_rope(char *text)
     new_rope->right = NULL;
     new_rope->text = UTIL_NEW_STR_IF(text);
     new_rope->weight = 0;
-    new_rope->len = 0;
+    if(text != NULL)
+        new_rope->len = strlen(text);
+    else
+        new_rope->len = 0;
+    
     return new_rope;
 }
 
@@ -34,7 +40,7 @@ char *tostring(Rope_p rope)
 {// Convert the rope to char *.
     if(rope->text != NULL)
         return rope->text;
-    char *result = "";
+    char *result = UTIL_malloc(rope->len * sizeof(char));
     if(rope->left != NULL)
         result = strcat(result, tostring(rope->left));
     if(rope->right != NULL)
@@ -67,6 +73,8 @@ Rope_p rope_concat(Rope_p first, Rope_p second)
     Rope_p parent = new_rope(NULL);
     parent->left = first;
     parent->right = second;
+    parent->weight = first->len;
+    parent->len = first->len + second->len;
     return parent;
 }
 
