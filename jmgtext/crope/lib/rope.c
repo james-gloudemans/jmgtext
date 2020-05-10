@@ -2,12 +2,12 @@
 #include "util.h"
 #include "rope.h"
 
-Rope_p new_rope()
-{// Create a new empty rope.
+Rope_p new_rope(char *text)
+{// Create a new Rope to represent text
     Rope_p new_rope = UTIL_NEW(Rope);
     new_rope->left = NULL;
     new_rope->right = NULL;
-    new_rope->text = NULL;
+    new_rope->text = UTIL_NEW_STR_IF(text);
     new_rope->weight = 0;
     new_rope->len = 0;
     return new_rope;
@@ -64,8 +64,9 @@ char rope_getchar(Rope_p rope, int i)
 
 Rope_p rope_concat(Rope_p first, Rope_p second)
 {// Return the concatenation of two ropes.
-    Rope_p parent = new_rope();
+    Rope_p parent = new_rope(NULL);
     parent->left = first;
     parent->right = second;
     return parent;
 }
+
