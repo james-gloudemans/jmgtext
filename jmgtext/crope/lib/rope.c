@@ -41,3 +41,23 @@ char *tostring(Rope_p rope)
         result = strcat(result, tostring(rope->right));
     return result;
 }
+
+int rope_len(Rope_p rope)
+{// Return the length of the rope.
+    return rope->len;
+}
+
+UTIL_BOOL_t is_rope_empty(Rope_p rope)
+{// Is the rope empty?
+    return rope->len == 0;
+}
+
+char rope_getchar(Rope_p rope, int i)
+{// Return the character at position i.
+    UTIL_ASSERT(i < rope_len(rope) && i >= 0);
+    if(i >= rope->weight && rope->right != NULL)
+        return rope_getchar(rope->right, i - rope->weight);
+    if(rope->left != NULL)
+        return rope_getchar(rope->left, i);
+    return rope->text[i];
+}

@@ -31,7 +31,7 @@ char *tostring(Rope_p rope);
 // Return the length of the rope.
 int rope_len(Rope_p rope);
 
-// Is the rope empty
+// Is the rope empty?
 UTIL_BOOL_t is_rope_empty(Rope_p rope);
 
 // Get the character at position i in the rope
