@@ -61,3 +61,11 @@ char rope_getchar(Rope_p rope, int i)
         return rope_getchar(rope->left, i);
     return rope->text[i];
 }
+
+Rope_p rope_concat(Rope_p first, Rope_p second)
+{// Return the concatenation of two ropes.
+    Rope_p parent = new_rope();
+    parent->left = first;
+    parent->right = second;
+    return parent;
+}
