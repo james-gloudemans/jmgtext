@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     for(int i=0; i<rope_len(rope); ++i)
         printf("%c", rope_getchar(rope, i));
     printf("\n");
+    printf("%s\n", tostring(rope));
 
     return 0;
 }
