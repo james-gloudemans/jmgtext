@@ -25,7 +25,7 @@ def main(screen):
             buffer = buffer[: str_pos - 1] + buffer[str_pos:]
             if cur_pos[1] == 0:
                 if cur_pos[0] != 0:
-                    x = len(buffer.splitlines()[-1])
+                    x = len(buffer.splitlines()[cur_pos[0] - 1])
                     cur_pos = (cur_pos[0] - 1, x)
                     str_pos -= 1
             else:
@@ -35,7 +35,7 @@ def main(screen):
         elif key == "KEY_LEFT":
             if cur_pos[1] == 0:
                 if cur_pos[0] != 0:
-                    x = len(buffer.splitlines()[-1])
+                    x = len(buffer.splitlines()[cur_pos[0] - 1])
                     cur_pos = (cur_pos[0] - 1, x)
                     str_pos -= 1
             else:
