@@ -19,6 +19,9 @@ typedef struct Rope_tuple {
 // Create a new Rope to represent text
 Rope_p new_rope(char *text);
 
+// Create a copy of a rope node
+Rope_p copy_rope_node(Rope_p node);
+
 // Destroy the Rope
 void free_rope(Rope_p rope);
 
@@ -53,7 +56,7 @@ Rope_p rope_put(Rope_p rope, int i, char *str);
 Rope_p rope_remove(Rope_p rope, int i, int j);
 
 // Cut the rope at position i and return the left and right ropes
-Rope_tuple_p rope_cut(Rope_p rope, int i);
+Rope_tuple_p rope_cut(Rope_p rope, const int i);
 
 // Rebalance the rope
 Rope_p rope_balance(Rope_p rope);
