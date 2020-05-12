@@ -61,6 +61,9 @@ Rope_tuple_p rope_cut(Rope_p rope, const int i);
 // Rebalance the rope
 Rope_p rope_balance(Rope_p rope);
 
+// Return the nth Fibonacci number
+int _fib(const int n);
+
 // Return the substring from position i to j
 Rope_p rope_substr(Rope_p rope, int i, int j);
 

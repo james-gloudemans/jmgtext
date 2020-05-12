@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "util.h"
 #include "rope.h"
 
@@ -136,4 +137,10 @@ Rope_tuple_p rope_cut(Rope_p rope, const int i)
     left_cut = new_rope(left_text);
     right_cut = new_rope(right_text);
     return & (Rope_tuple) {left_cut, right_cut};
+}
+
+// Return the nth Fibonacci number
+int _fib(const int n)
+{
+    return (pow(1 + sqrt(5), n) - pow(1 - sqrt(5), n)) / (pow(2, n) * sqrt(5));
 }

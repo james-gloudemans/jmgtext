@@ -9,7 +9,7 @@ librope.so: rope.o util.o
 	gcc -c -Wall -Werror -fpic -I . $^
 
 test: test.o util.o rope.o
-	gcc -o test test.o util.o rope.o
+	gcc -o test test.o util.o rope.o -lm
 
 rope: librope.so
 	./build_rope.py
