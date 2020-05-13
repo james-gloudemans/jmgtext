@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """jmgtext.py: A text editor for fun."""
 # standard library
 import curses
