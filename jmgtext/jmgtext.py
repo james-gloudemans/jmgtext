@@ -33,6 +33,16 @@ def main(screen):
                 x -= 1
                 screen.delch(y, x)
 
+        elif key == "KEY_DC":
+            if x == len(buffer[y]):
+                if y != len(buffer) - 1:
+                    buffer[y] += buffer[y + 1]
+                    buffer[y + 1 :] = buffer[y + 2 :]
+                    screen.clear()
+            else:
+                buffer[y] = buffer[y][:x] + buffer[y][x + 1 :]
+                screen.clear()
+
         elif key == "KEY_LEFT":
             if x == 0:
                 if y != 0:
