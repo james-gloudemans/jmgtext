@@ -9,16 +9,6 @@ import string
 from rope import Rope
 
 
-def insert(s: str, i: int, sub: str) -> str:
-    """Shortcut to insert sub at position i in s."""
-    return s[:i] + sub + s[i:]
-
-
-def remove(s: str, i: int) -> str:
-    """Shortcut to remove character i from s."""
-    return s[: i - 1] + s[i:]
-
-
 def main(screen):
     """Main text editor loop."""
     buffer = [""]
@@ -29,6 +19,7 @@ def main(screen):
             break
         elif len(key) == 1 and curses.unctrl(key) == b"^P":
             screen.addstr(10, 0, "\n".join(buffer))
+
         elif key == "KEY_BACKSPACE":
             if x == 0:
                 if y != 0:
@@ -39,9 +30,10 @@ def main(screen):
                     screen.clear()
                     y -= 1
             else:
-                buffer[y] = remove(buffer[y], x)
+                buffer[y] = buffer[y][: x - 1] + buffer[y][x:]
                 x -= 1
                 screen.delch(y, x)
+
         elif key == "KEY_LEFT":
             if x == 0:
                 if y != 0:
@@ -50,6 +42,14 @@ def main(screen):
             else:
                 x -= 1
 
+        elif key == "KEY_RIGHT":
+            if x == len(buffer[y]):
+                if y != len(buffer) - 1:
+                    x = 0
+                    y += 1
+            else:
+                x += 1
+
         elif key in string.printable:
             if key == "\n":
                 buffer.insert(y + 1, buffer[y][x:])
@@ -57,7 +57,7 @@ def main(screen):
                 y += 1
                 x = 0
             else:
-                buffer[y] = insert(buffer[y], x, key)
+                buffer[y] = buffer[y][:x] + key + buffer[y][x:]
                 x += 1
         else:
             pass
