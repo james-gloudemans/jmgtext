@@ -20,11 +20,11 @@ int main(int argc, char *argv[])
     // printf("\n");
     // printf("%s\n", tostring(rope));
 
-    Rope_tuple_p tmp = rope_cut(rope, 6);
-    Rope_p left = tmp->left;
-    Rope_p right = tmp->right;
-    printf("%s\n", tostring(left));
-    printf("%s\n", tostring(right));
+    // Rope_tuple_p tmp = rope_cut(rope, 6);
+    // Rope_p left = tmp->left;
+    // Rope_p right = tmp->right;
+    // printf("%s\n", tostring(left));
+    // printf("%s\n", tostring(right));
 
     // char *str = "Hello bitches I am Yimbo.";
     // const int len = strlen(str);

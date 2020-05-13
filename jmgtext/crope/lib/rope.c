@@ -139,8 +139,21 @@ Rope_tuple_p rope_cut(Rope_p rope, const int i)
     return & (Rope_tuple) {left_cut, right_cut};
 }
 
-// Return the nth Fibonacci number
-int _fib(const int n)
+Rope_p rope_balance(Rope_p rope)
 {
+    return new_rope(NULL);
+}
+
+int _fib(const int n)
+{// Return the nth Fibonacci number
     return (pow(1 + sqrt(5), n) - pow(1 - sqrt(5), n)) / (pow(2, n) * sqrt(5));
+}
+
+int _balance_slot(int n)
+{// Return the largest Fibonacci number <= n
+    int i = 0;
+    int fib = _fib(i);
+    while(fib <= n)
+        fib = _fib(++i);
+    return _fib(i-1);
 }
