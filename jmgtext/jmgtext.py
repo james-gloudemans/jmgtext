@@ -61,6 +61,8 @@ def main(screen):
                 x = min(x, len(buffer[y]))
 
         elif key in string.printable:
+            if key == "\t":
+                key = " " * 4
             if key == "\n":
                 buffer.insert(y + 1, buffer[y][x:])
                 buffer[y] = buffer[y][:x]
@@ -68,7 +70,7 @@ def main(screen):
                 x = 0
             else:
                 buffer[y] = buffer[y][:x] + key + buffer[y][x:]
-                x += 1
+                x += len(key)
         else:
             pass
 
