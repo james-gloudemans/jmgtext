@@ -50,6 +50,16 @@ def main(screen):
             else:
                 x += 1
 
+        elif key == "KEY_UP":
+            if y != 0:
+                y -= 1
+            x = min(x, len(buffer[y]))
+
+        elif key == "KEY_DOWN":
+            if y != len(buffer) - 1:
+                y += 1
+                x = min(x, len(buffer[y]))
+
         elif key in string.printable:
             if key == "\n":
                 buffer.insert(y + 1, buffer[y][x:])
