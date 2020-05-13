@@ -26,7 +26,6 @@ def main(screen):
                     x = len(buffer[y - 1])
                     buffer[y - 1] += buffer[y]
                     buffer[y:] = buffer[y + 1 :]
-                    buffer[-1] = ""
                     screen.clear()
                     y -= 1
             else:
@@ -59,6 +58,12 @@ def main(screen):
             if y != len(buffer) - 1:
                 y += 1
                 x = min(x, len(buffer[y]))
+
+        elif key == "KEY_HOME":
+            x = 0
+
+        elif key == "KEY_END":
+            x = len(buffer[y])
 
         elif key in string.printable:
             if key == "\t":
