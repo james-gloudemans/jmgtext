@@ -10,3 +10,5 @@ jmgtext/crope/lib/*.o
 jmgtext/crope/lib/_*
 jmgtext/crope/lib/*.so
 jmgtext/crope/lib/test
+.coverage
+htmlcov/
