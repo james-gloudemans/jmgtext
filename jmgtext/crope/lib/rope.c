@@ -66,7 +66,7 @@ int rope_len(Rope_p rope)
     return rope->len;
 }
 
-UTIL_BOOL_t is_rope_empty(Rope_p rope)
+UTIL_BOOL is_rope_empty(Rope_p rope)
 {// Is the rope empty?
     return rope->len == 0;
 }
@@ -143,4 +143,67 @@ Rope_tuple_p rope_cut(Rope_p rope, const int i)
 int _fib(const int n)
 {
     return (pow(1 + sqrt(5), n) - pow(1 - sqrt(5), n)) / (pow(2, n) * sqrt(5));
+}
+
+Rope_p rope_balance(Rope_p rope)
+{// Return a balanced version of rope
+    Rope_p result = NULL;
+    Rope_p node = rope;
+    Rope_stack_p stack = NULL;
+    int done = 0;
+    // Loop over leaves
+    while(!done)
+    {
+        if(node != NULL)
+        {
+            push(&stack, node);
+            node = node->left;
+        }
+        else
+        {
+            if(!isEmpty(stack))
+            {
+                node = pop(&stack);
+                if(node->left == NULL && node->right == NULL)
+                { // Found leaf
+                    printf("Found leaf\n");
+                }
+                node = node->right;
+            }
+            else
+                done = 1;            
+        }
+        
+    }
+    return result;
+}
+
+void push(Rope_stack_p *stack, Rope_p node)
+{
+    Rope_stack_p new_node = UTIL_NEW(Rope_stack_t);
+    new_node->node = node;
+    new_node->next = *stack;
+    (*stack) = new_node;
+}
+
+Rope_p pop(Rope_stack_p *stack)
+{
+    if(isEmpty(*stack))
+    {
+        printf("Stack underflow.\n");
+        exit(0);
+    }
+    else
+    {    
+        Rope_stack_p top = *stack;
+        Rope_p node = top->node;
+        (*stack) = top->next;
+        UTIL_FREE(top);
+        return node;
+    }
+}
+
+UTIL_BOOL isEmpty(Rope_stack_p stack)
+{
+    return stack == NULL;
 }
