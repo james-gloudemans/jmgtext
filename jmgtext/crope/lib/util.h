@@ -15,7 +15,7 @@
 #define UTIL_NEW_STR_IF(str) ((str) == NULL ? NULL : UTIL_NEW_STR((str)))
 #define UTIL_FREE(p)  do { UTIL_free(p); p = NULL; } while (0)
 
-typedef char UTIL_BOOL_t;
+typedef char UTIL_BOOL;
 
 void *UTIL_malloc(size_t size);
 void *UTIL_calloc(size_t num, size_t size);
