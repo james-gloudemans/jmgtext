@@ -77,4 +77,7 @@ int _fib(const int n);
 // Return the substring from position i to j
 Rope_p rope_substr(Rope_p rope, int i, int j);
 
+// Coroutine generating the leaf nodes of the rope.
+Rope_p get_leaves(Rope_p rope);
+
 #endif

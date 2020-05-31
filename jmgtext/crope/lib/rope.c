@@ -83,6 +83,10 @@ char rope_getchar(Rope_p rope, int i)
 
 Rope_p rope_concat(Rope_p first, Rope_p second)
 {// Return the concatenation of two ropes.
+    if(first == NULL)
+        return second;
+    if(second == NULL)
+        return first;
     Rope_p parent = new_rope(NULL);
     parent->left = first;
     parent->right = second;
@@ -143,6 +147,47 @@ Rope_tuple_p rope_cut(Rope_p rope, const int i)
 int _fib(const int n)
 {
     return (pow(1 + sqrt(5), n) - pow(1 - sqrt(5), n)) / (pow(2, n) * sqrt(5));
+}
+
+Rope_p get_leaves(Rope_p rope)
+{// Coroutine generating the leaf nodes of the rope.
+    static Rope_p node;
+    static Rope_stack_p stack;
+    static int done;
+    static int state = 0;    
+    switch(state)
+    {
+        case 0:
+            state = 1;
+            node = rope;
+            done = 0;
+            stack = NULL;
+            while(!done)
+            {
+                if(node != NULL)
+                {
+                    push(&stack, node);
+                    node = node->left;
+                }
+                else
+                {
+                    if(!isEmpty(stack))
+                    {
+                        node = pop(&stack);
+                        if(node->left == NULL && node->right == NULL)
+                        { // Found leaf
+                            return node;
+                            case 1:;
+                        }
+                        node = node->right;
+                    }
+                    else
+                        done = 1;
+                }   
+            }
+    }
+    state = 0;
+    return NULL;
 }
 
 Rope_p rope_balance(Rope_p rope)

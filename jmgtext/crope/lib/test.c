@@ -6,14 +6,18 @@
 
 int main(int argc, char *argv[])
 {
-//     char *text = "Sami is hot";
-//     Rope_p rope = new_rope(NULL);
-//     for(int i=0; i<strlen(text); ++i)
-//     {
-//         char c[2] = {text[i], '\0'};
-//         Rope_p rc = new_rope(c);
-//         rope = rope_concat(rope, rc);
-//     }
+    char *text = "Sami is hot";
+    Rope_p rope = NULL;
+    for(int i=0; i<strlen(text); ++i)
+    {
+        char c[2] = {text[i], '\0'};
+        Rope_p rc = new_rope(c);
+        rope = rope_concat(rope, rc);
+    }
+    Rope_p node;
+    for(; (node = get_leaves(rope)); )
+        printf("%s\n", node->text);
+
     // printf("%d\n", rope_len(rope));
     // for(int i=0; i<rope_len(rope); ++i)
     //     printf("%c", rope_getchar(rope, i));
