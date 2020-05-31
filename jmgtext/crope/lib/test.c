@@ -6,25 +6,25 @@
 
 int main(int argc, char *argv[])
 {
-    char *text = "Sami is hot";
-    Rope_p rope = new_rope(NULL);
-    for(int i=0; i<strlen(text); ++i)
-    {
-        char c[2] = {text[i], '\0'};
-        Rope_p rc = new_rope(c);
-        rope = rope_concat(rope, rc);
-    }
+//     char *text = "Sami is hot";
+//     Rope_p rope = new_rope(NULL);
+//     for(int i=0; i<strlen(text); ++i)
+//     {
+//         char c[2] = {text[i], '\0'};
+//         Rope_p rc = new_rope(c);
+//         rope = rope_concat(rope, rc);
+//     }
     // printf("%d\n", rope_len(rope));
     // for(int i=0; i<rope_len(rope); ++i)
     //     printf("%c", rope_getchar(rope, i));
     // printf("\n");
     // printf("%s\n", tostring(rope));
 
-    Rope_tuple_p tmp = rope_cut(rope, 6);
-    Rope_p left = tmp->left;
-    Rope_p right = tmp->right;
-    printf("%s\n", tostring(left));
-    printf("%s\n", tostring(right));
+    // Rope_tuple_p tmp = rope_cut(rope, 6);
+    // Rope_p left = tmp->left;
+    // Rope_p right = tmp->right;
+    // printf("%s\n", tostring(left));
+    // printf("%s\n", tostring(right));
 
     // char *str = "Hello bitches I am Yimbo.";
     // const int len = strlen(str);
