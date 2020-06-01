@@ -14,9 +14,8 @@ int main(int argc, char *argv[])
         Rope_p rc = new_rope(c);
         rope = rope_concat(rope, rc);
     }
-    Rope_p node;
-    for(; (node = get_leaves(rope)); )
-        printf("%s\n", node->text);
+    rope = rope_balance(rope);
+    printf("Final string: %s\n", tostring(rope));
 
     // printf("%d\n", rope_len(rope));
     // for(int i=0; i<rope_len(rope); ++i)

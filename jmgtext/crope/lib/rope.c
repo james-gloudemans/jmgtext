@@ -148,20 +148,31 @@ int _fib(const int n)
     return (pow(1 + sqrt(5), n) - pow(1 - sqrt(5), n)) / (pow(2, n) * sqrt(5));
 }
 
+int _fib_n_gt(const int n)
+{// Return the index of the smallest Fibonacci number >= n
+    if(n == 1)
+        return 2;
+    int fib = 0;
+    int i = 0;
+    while(fib < n)
+    {
+        fib = _fib(++i);
+    }
+    return i;
+}
+
 Rope_p get_leaves(Rope_p rope)
 {// Coroutine generating the leaf nodes of the rope.
     static Rope_p node;
     static Rope_stack_p stack;
-    static int done;
     static int state = 0;    
     switch(state)
     {
         case 0:
             state = 1;
             node = rope;
-            done = 0;
             stack = NULL;
-            while(!done)
+            while(node != NULL || !isEmpty(stack))
             {
                 if(node != NULL)
                 {
@@ -180,8 +191,6 @@ Rope_p get_leaves(Rope_p rope)
                         }
                         node = node->right;
                     }
-                    else
-                        done = 1;
                 }   
             }
     }
@@ -192,33 +201,42 @@ Rope_p get_leaves(Rope_p rope)
 Rope_p rope_balance(Rope_p rope)
 {// Return a balanced version of rope
     Rope_p result = NULL;
-    Rope_p node = rope;
-    Rope_stack_p stack = NULL;
-    int done = 0;
-    // Loop over leaves
-    while(!done)
+    Rope_p node;
+    int numslots = _fib_n_gt(rope->len);
+    Rope_p *slots = UTIL_malloc(numslots*sizeof(Rope_p));
+    for(int i=0; i<numslots; ++i)
+        slots[i] = NULL;
+    int slot;
+    for(; (node = get_leaves(rope)); )
     {
-        if(node != NULL)
+        int done = 0;
+        Rope_p bal_node = copy_rope_node(node);
+        while(!done)
         {
-            push(&stack, node);
-            node = node->left;
-        }
-        else
-        {
-            if(!isEmpty(stack))
+            slot = _fib_n_gt(bal_node->len) - 2;
+            Rope_p prev = NULL;
+            for(int i=0; i<=slot; ++i)
             {
-                node = pop(&stack);
-                if(node->left == NULL && node->right == NULL)
-                { // Found leaf
-                    printf("Found leaf\n");
+                if(slots[i] != NULL)
+                {
+                    prev = rope_concat(prev, slots[i]);
+                    slots[i] = NULL;
                 }
-                node = node->right;
+            }
+            if(prev != NULL)
+            {
+                bal_node = rope_concat(prev, bal_node);
             }
             else
-                done = 1;            
+            {
+                slots[slot] = bal_node;
+                done = 1;
+            }
         }
-        
     }
+    for(int i=0; i<numslots; ++i)
+        if(slots[i] != NULL)
+            result = rope_concat(slots[i], result);
     return result;
 }
 

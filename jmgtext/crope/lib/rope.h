@@ -74,7 +74,8 @@ Rope_p rope_balance(Rope_p rope);
 // Return the nth Fibonacci number
 int _fib(const int n);
 
-int _balance_slot(int n);
+// Return the index of the largest Fibonacci number <= n
+int _fib_n_gt(const int n);
 
 // Return the substring from position i to j
 Rope_p rope_substr(Rope_p rope, int i, int j);
