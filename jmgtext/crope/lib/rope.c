@@ -143,11 +143,6 @@ Rope_tuple_p rope_cut(Rope_p rope, const int i)
     return & (Rope_tuple) {left_cut, right_cut};
 }
 
-Rope_p rope_balance(Rope_p rope)
-{
-    return new_rope(NULL);
-}
-
 int _fib(const int n)
 {// Return the nth Fibonacci number
     return (pow(1 + sqrt(5), n) - pow(1 - sqrt(5), n)) / (pow(2, n) * sqrt(5));
