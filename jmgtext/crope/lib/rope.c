@@ -162,7 +162,7 @@ int _fib_n_gt(const int n)
 }
 
 Rope_p get_leaves(Rope_p rope)
-{// Coroutine generating the leaf nodes of the rope.
+{// Coroutine returning the leaf nodes of the rope.
     static Rope_p node;
     static Rope_stack_p stack;
     static int state = 0;    
