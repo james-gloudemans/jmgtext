@@ -16,6 +16,16 @@ typedef struct Rope_tuple {
     Rope_p right;
 } Rope_tuple, *Rope_tuple_p;
 
+typedef struct Rope_stack {
+    Rope_p node;
+    struct Rope_stack *next;
+} Rope_stack_t, *Rope_stack_p;
+
+// Stack functions
+void push(Rope_stack_p *stack, Rope_p node);
+Rope_p pop(Rope_stack_p *stack);
+UTIL_BOOL isEmpty(Rope_stack_p stack);
+
 // Create a new Rope to represent text
 Rope_p new_rope(char *text);
 
@@ -35,13 +45,13 @@ char *tostring(Rope_p rope);
 int rope_len(Rope_p rope);
 
 // Is the rope empty?
-UTIL_BOOL_t is_rope_empty(Rope_p rope);
+UTIL_BOOL is_rope_empty(Rope_p rope);
 
 // Get the character at position i in the rope
 char rope_getchar(Rope_p rope, int i);
 
 // Does the rope contain character c?
-UTIL_BOOL_t rope_contains(Rope_p rope, char c);
+UTIL_BOOL rope_contains(Rope_p rope, char c);
 
 // Return the concatenation of two ropes
 Rope_p rope_concat(Rope_p first, Rope_p second);
@@ -58,7 +68,7 @@ Rope_p rope_remove(Rope_p rope, int i, int j);
 // Cut the rope at position i and return the left and right ropes
 Rope_tuple_p rope_cut(Rope_p rope, const int i);
 
-// Rebalance the rope
+// Return a balanced copy of the rope
 Rope_p rope_balance(Rope_p rope);
 
 // Return the nth Fibonacci number
@@ -68,5 +78,8 @@ int _balance_slot(int n);
 
 // Return the substring from position i to j
 Rope_p rope_substr(Rope_p rope, int i, int j);
+
+// Coroutine generating the leaf nodes of the rope.
+Rope_p get_leaves(Rope_p rope);
 
 #endif
