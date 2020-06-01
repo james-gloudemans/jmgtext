@@ -8,17 +8,64 @@
 
 Rope_p new_rope(char *text)
 {// Create a new Rope to represent text
-    Rope_p new_rope = UTIL_NEW(Rope);
-    new_rope->left = NULL;
-    new_rope->right = NULL;
-    new_rope->text = UTIL_NEW_STR_IF(text);
-    new_rope->weight = 0;
-    if(text != NULL)
-        new_rope->len = strlen(text);
+    Rope_p result = UTIL_NEW(Rope);
+    if(strlen(text) <= DEFAULT_LEAF_LEN)
+    {
+        result->left = NULL;
+        result->right = NULL;
+        result->text = UTIL_NEW_STR_IF(text);
+        result->weight = 0;
+        if(text != NULL)
+            result->len = strlen(text);
+        else
+            result->len = 0;
+    }
     else
-        new_rope->len = 0;
+    {// Break up long string
+        int num_chunks = strlen(text) / DEFAULT_LEAF_LEN+1;
+        Rope_p *chunks = UTIL_malloc(num_chunks*sizeof(Rope_p));
+        for(int i=0; i<num_chunks; ++i)
+        {
+            char *next_str = UTIL_malloc(DEFAULT_LEAF_LEN*sizeof(char));
+            if(strlen(text) >= DEFAULT_LEAF_LEN)
+                memcpy(next_str, text, DEFAULT_LEAF_LEN);
+            else
+                next_str = strcpy(next_str, text);
+            chunks[i] = new_rope(next_str);
+            text += DEFAULT_LEAF_LEN;
+        }
+        int cur_num_chunks = num_chunks;
+        for(int i=0; i<num_chunks / 2; ++i)
+        {
+            printf("%d: %s\n", i, tostring(chunks[0]));
+            Rope_p *tmp;
+            if(cur_num_chunks % 2 == 0)
+            {
+                printf("Even\n");
+                tmp = UTIL_malloc(cur_num_chunks / 2);
+                for(int j=0; j<cur_num_chunks/2; ++j)
+                    tmp[j] = rope_concat(chunks[2*j], chunks[2*j + 1]);
+            }
+            else
+            {
+                printf("Odd\n");
+                tmp = UTIL_malloc(cur_num_chunks / 2 + 1);
+                for(int j=0; j<cur_num_chunks/2-1; ++j)
+                    tmp[j] = rope_concat(chunks[2*j], chunks[2*j + 1]);
+                tmp[cur_num_chunks/2] = chunks[cur_num_chunks - 1];
+            }
+            
+            UTIL_free(chunks);
+            chunks = tmp;
+            cur_num_chunks /= 2;
+            if(i % 50000 == 0)
+                for(int j=0; j<cur_num_chunks; ++j)
+                    chunks[i] = rope_balance(chunks[i]);
+        }
+        result = rope_balance(chunks[0]);
+    }
     
-    return new_rope;
+    return result;
 }
 
 Rope_p copy_rope_node(Rope_p node)
