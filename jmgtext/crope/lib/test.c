@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
         rope = rope_concat(rope, rc);
     }
     rope = rope_balance(rope);
-    printf("Final string: %s\n", tostring(rope));
+    printf("Built rope: %s\n", tostring(rope));
 
     // printf("%d\n", rope_len(rope));
     // for(int i=0; i<rope_len(rope); ++i)

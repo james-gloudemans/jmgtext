@@ -201,15 +201,14 @@ Rope_p get_leaves(Rope_p rope)
 Rope_p rope_balance(Rope_p rope)
 {// Return a balanced version of rope, see 'Ropes: an alternative to strings' for details.
     Rope_p result = NULL;
-    Rope_p node;
     int numslots = _fib_n_gt(rope->len);
     Rope_p *slots = UTIL_malloc(numslots*sizeof(Rope_p));
     for(int i=0; i<numslots; ++i)
         slots[i] = NULL;
     int slot;
-    for(; (node = get_leaves(rope)); )
+    for(Rope_p node; (node = get_leaves(rope)); )
     {
-        int done = 0;
+        int done = UTIL_FALSE;
         Rope_p bal_node = copy_rope_node(node);
         while(!done)
         {
@@ -230,7 +229,7 @@ Rope_p rope_balance(Rope_p rope)
             else
             {
                 slots[slot] = bal_node;
-                done = 1;
+                done = UTIL_TRUE;
             }
         }
     }
@@ -238,6 +237,62 @@ Rope_p rope_balance(Rope_p rope)
         if(slots[i] != NULL)
             result = rope_concat(slots[i], result);
     return result;
+}
+
+UTIL_BOOL rope_contains(Rope_p rope, const char c)
+{
+    for(Rope_p node; (node = get_leaves(rope)); )
+        if(strchr(node->text, c) != NULL)
+            return UTIL_TRUE;
+    return UTIL_FALSE;
+}
+
+Rope_p rope_dupe(Rope_p rope, const int n)
+{// Return the rope duplicated n times
+    if(n == 0)
+        return new_rope(NULL);
+    Rope_p result = NULL;
+    for(int i=0; i<n; ++i)
+        result = rope_concat(result, rope);
+    return result;
+}
+
+Rope_p rope_put(Rope_p rope, const int i, char *str)
+{// Return the rope with str inserted at position i
+    Rope_p ins_rope = new_rope(str);
+    if(i == rope_len(rope))
+        return rope_concat(rope, ins_rope);
+    if(i == 0)
+        return rope_concat(ins_rope, rope);
+    Rope_tuple_p cuts = rope_cut(rope, i);
+    return rope_concat(rope_concat(cuts->left, ins_rope), cuts->right);
+}
+
+Rope_p rope_remove(Rope_p rope, const int i, const int j)
+{// Return the rope with index i->j removed
+    int n = rope_len(rope);
+    if(i == 0 && j > n)
+        return new_rope(NULL);
+    if(i == 0)
+        return rope_cut(rope, j)->right;
+    Rope_p left = rope_cut(rope, i)->left;
+    if(j > n)
+        return left;
+    Rope_p right = rope_cut(rope, j)->right;
+    return rope_concat(left, right);
+}
+
+Rope_p rope_substr(Rope_p rope, const int i, const int j)
+{// Return the substring from position i to j
+    const int n = rope_len(rope);
+    if(i == 0 && j > n)
+        return copy_rope_node(rope);
+    if(i == 0)
+        return rope_cut(rope, j)->left;
+    if(j > n)
+        return rope_cut(rope, i)->right;
+    Rope_p j_cut = rope_cut(rope, j)->left;
+    return rope_cut(j_cut, i)->right;
 }
 
 void push(Rope_stack_p *stack, Rope_p node)

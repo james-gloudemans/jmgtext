@@ -207,7 +207,7 @@ class Rope(Sequence):
         if i == 0:
             return self._cut(j)[1]
         left, mid = self._cut(i)
-        if j > len(self):
+        if j > n:
             return left
         mid, right = self._cut(j)
         return left + right
