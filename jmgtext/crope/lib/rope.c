@@ -199,7 +199,7 @@ Rope_p get_leaves(Rope_p rope)
 }
 
 Rope_p rope_balance(Rope_p rope)
-{// Return a balanced version of rope
+{// Return a balanced version of rope, see 'Ropes: an alternative to strings' for details.
     Rope_p result = NULL;
     Rope_p node;
     int numslots = _fib_n_gt(rope->len);
@@ -241,7 +241,7 @@ Rope_p rope_balance(Rope_p rope)
 }
 
 void push(Rope_stack_p *stack, Rope_p node)
-{
+{// Push rope `node` onto the stack.
     Rope_stack_p new_node = UTIL_NEW(Rope_stack_t);
     new_node->node = node;
     new_node->next = *stack;
@@ -249,10 +249,10 @@ void push(Rope_stack_p *stack, Rope_p node)
 }
 
 Rope_p pop(Rope_stack_p *stack)
-{
+{// Remove and return the rope from the top of the stack
     if(isEmpty(*stack))
     {
-        printf("Stack underflow.\n");
+        printf("Rope stack underflow.\n");
         exit(0);
     }
     else
@@ -266,6 +266,6 @@ Rope_p pop(Rope_stack_p *stack)
 }
 
 UTIL_BOOL isEmpty(Rope_stack_p stack)
-{
+{// Is the stack empty
     return stack == NULL;
 }

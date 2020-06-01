@@ -11,11 +11,13 @@ typedef struct Rope {
     int len;
 } Rope, *Rope_p;
 
+// Container for two ropes, needed for rope_cut()
 typedef struct Rope_tuple {
     Rope_p left;
     Rope_p right;
 } Rope_tuple, *Rope_tuple_p;
 
+// A stack of ropes, needed for routines to iterate over nodes
 typedef struct Rope_stack {
     Rope_p node;
     struct Rope_stack *next;
