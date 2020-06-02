@@ -3,7 +3,7 @@
 
 #include "util.h"
 
-#define DEFAULT_LEAF_LEN 10
+#define DEFAULT_LEAF_LEN 10000
 
 typedef struct Rope {
     struct Rope *left;

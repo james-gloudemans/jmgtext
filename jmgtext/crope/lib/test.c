@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     char *string;
     Rope_p rope;
     clock_t t0, dt;
-    for(int p=2; p<3; ++p)
+    for(int p=3; p<9; ++p)
     {
         int N = pow(10, p);
         printf("For N = 10^%d\n", p);
@@ -49,22 +49,31 @@ int main(int argc, char *argv[])
         dt = 1000 * (clock() - t0) / CLOCKS_PER_SEC;
         printf("Build Rope: %ld sec %ld ms\n", dt/1000, dt%1000);
 
-        printf("string: %s\n", string);
-        printf("Rope:   %s\n", tostring(rope));
+        // printf("string: %s\n", string);
+        // printf("Rope:   %s\n", tostring(rope));
 
         char c;
         int len = strlen(string);
         t0 = clock();
-        for(int i=0; i<100; ++i)
+        for(int i=0; i<1000; ++i)
             c = string[rand() % len];
         dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
         printf("getchar string: '%c', %ld ms %ld us\n", c, dt/1000000, dt%1000000);
 
         t0 = clock();
-        for(int i=0; i<100; ++i)
+        for(int i=0; i<1000; ++i)
             c = rope_getchar(rope, rand() % len);
         dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
         printf("getchar Rope: '%c', %ld ms %ld us\n", c, dt/1000000, dt%1000000);
+
+        t0 = clock();
+        for(int i=0; i<1000; ++i)
+        {
+            rope = rope_put(rope, N/2, random_string(20));
+            rope = rope_remove(rope, N/2, N/2+20);
+        }
+        dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
+        printf("Insert / delete Rope: '%c', %ld ms %ld us\n", c, dt/1000000, dt%1000000);                
 
         free_rope(rope);
         UTIL_FREE(string);
