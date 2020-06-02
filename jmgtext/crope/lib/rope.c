@@ -91,9 +91,8 @@ void free_rope(Rope_p rope)
 
 void free_rope_node(Rope_p rope)
 {// Destroy the rope node.
-    UTIL_FREE(rope->left);
-    UTIL_FREE(rope->right);
-    UTIL_FREE(rope->text);
+    if(rope->text != NULL)
+        UTIL_FREE(rope->text);
     UTIL_FREE(rope);
 }
 

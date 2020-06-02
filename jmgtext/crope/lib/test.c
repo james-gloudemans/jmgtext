@@ -31,10 +31,17 @@ int main(int argc, char *argv[])
     // rope = rope_balance(rope);
     // printf("Built rope: %s\n", tostring(rope));
 
-    char *string = random_string(99);
-    Rope_p rope = new_rope(string);
-    printf("Rope: %s\n", tostring(rope));
-    printf("Strg: %s\n", string);
+    char *string;
+    Rope_p rope;
+    for(int p=3; p<7; ++p)
+    {
+        int N = pow(10, p);
+        printf("For N = %d\n", N);
+        string = random_string(N);
+        rope = new_rope(string);
+    }
+    free_rope(rope);
+    UTIL_FREE(string);
 
     return 0;
 }
