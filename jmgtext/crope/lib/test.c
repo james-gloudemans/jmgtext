@@ -11,14 +11,10 @@ char *random_string(int n)
 {// Return a random string of letters of length n
     char *result = UTIL_malloc(n*sizeof(char));
     srand(time(0));
-    char *alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char *alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     int len = strlen(alphabet);
     for(int i=0; i<n; ++i)
-    {
         result[i] = alphabet[rand() % (len)];
-        printf("%c", result[i]);
-    }
-    printf("\n");
     return result;
 }
 
@@ -35,8 +31,10 @@ int main(int argc, char *argv[])
     // rope = rope_balance(rope);
     // printf("Built rope: %s\n", tostring(rope));
 
-    Rope_p rope = new_rope(random_string(103));
-    printf("Built rope: %s\n", tostring(rope));
+    char *string = random_string(99);
+    Rope_p rope = new_rope(string);
+    printf("Rope: %s\n", tostring(rope));
+    printf("Strg: %s\n", string);
 
     return 0;
 }
