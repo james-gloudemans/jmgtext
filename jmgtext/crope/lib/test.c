@@ -58,13 +58,13 @@ int main(int argc, char *argv[])
         for(int i=0; i<1000; ++i)
             c = string[rand() % len];
         dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("getchar string: '%c', %ld ms %ld us\n", c, dt/1000000, dt%1000000);
+        printf("getchar string: '%c', %ld ms %ld us\n", c, dt/1000, dt%1000);
 
         t0 = clock();
         for(int i=0; i<1000; ++i)
             c = rope_getchar(rope, rand() % len);
         dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("getchar Rope: '%c', %ld ms %ld us\n", c, dt/1000000, dt%1000000);
+        printf("getchar Rope: '%c', %ld ms %ld us\n", c, dt/1000, dt%1000);
 
         t0 = clock();
         for(int i=0; i<1000; ++i)
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
             rope = rope_remove(rope, N/2, N/2+20);
         }
         dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("Insert / delete Rope: '%c', %ld ms %ld us\n", c, dt/1000000, dt%1000000);                
+        printf("Insert / delete Rope: '%c', %ld ms %ld us\n", c, dt/1000, dt%1000);                
 
         free_rope(rope);
         UTIL_FREE(string);
