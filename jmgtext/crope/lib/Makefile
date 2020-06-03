@@ -15,4 +15,4 @@ rope: librope.so
 	./build_rope.py
 
 clean:
-	rm -f test *.o *.so _cffi_rope.c
+	rm -f rope_test *.o *.so _cffi_rope.c
