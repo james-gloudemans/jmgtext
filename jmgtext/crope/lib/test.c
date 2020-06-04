@@ -9,12 +9,13 @@
 
 char *random_string(int n)
 {// Return a random string of letters of length n
-    char *result = UTIL_malloc(n*sizeof(char));
+    char *result = UTIL_malloc(n*sizeof(char) + 1);
     srand(time(0));
     char *alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     int len = strlen(alphabet);
     for(int i=0; i<n; ++i)
         result[i] = alphabet[rand() % (len)];
+    result[n] = '\0';
     return result;
 }
 
@@ -64,6 +65,20 @@ int main(int argc, char *argv[])
         dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
         printf("getchar Rope: '%c', %.2e sec\n", c, dt);
 
+        int ins_len = 20;
+        t0 = clock();
+        for(int i=0; i<1000; ++i)
+        {
+        
+            string = (char *)UTIL_realloc(string, (N + ins_len + 1)*sizeof(char));
+            strcpy(string + N/2 + ins_len, string + N/2);
+            strcpy(string + N/2, random_string(20));
+            strcpy(string + N/2, string + N/2 + ins_len);
+            string = (char *)UTIL_realloc(string, (N + 1)*sizeof(char));
+        }        
+        dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
+        printf("Insert / delete string: %.2e sec \n", dt);
+
         t0 = clock();
         for(int i=0; i<1000; ++i)
         {
@@ -71,7 +86,7 @@ int main(int argc, char *argv[])
             rope = rope_remove(rope, N/2, N/2+20);
         }
         dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
-        printf("Insert / delete Rope: '%c', %.2e sec\n", c, dt);
+        printf("Insert / delete Rope: %.2e sec\n", dt);
 
         free_rope(rope);
         UTIL_FREE(string);
