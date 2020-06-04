@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     char *string;
     Rope_p rope;
     clock_t t0, dt;
-    for(int p=3; p<9; ++p)
+    for(int p=6; p<10; ++p)
     {
         int N = pow(10, p);
         printf("For N = 10^%d\n", p);
