@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
 
     char *string;
     Rope_p rope;
-    clock_t t0, dt;
+    clock_t t0;
+    double dt;
     for(int p=6; p<10; ++p)
     {
         int N = pow(10, p);
@@ -41,26 +42,27 @@ int main(int argc, char *argv[])
 
         t0 = clock();
         string = random_string(N);
-        dt = 1000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("Build string: %ld s %ld ms\n", dt/1000, dt%1000);
+        dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
+        printf("Build string: %.2e\n", dt);
 
         t0 = clock();
         rope = new_rope(string);
-        dt = 1000 * (clock() - t0) / CLOCKS_PER_SEC;
+        dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
+        printf("Build rope: %.2e sec\n", dt);
 
         char c;
         int len = strlen(string);
         t0 = clock();
         for(int i=0; i<1000; ++i)
             c = string[rand() % len];
-        dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("getchar string: '%c', %ld ms %ld us\n", c, dt/1000, dt%1000);
+        dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
+        printf("getchar string: '%c', %.2e sec\n", c, dt);
 
         t0 = clock();
         for(int i=0; i<1000; ++i)
             c = rope_getchar(rope, rand() % len);
-        dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("getchar Rope: '%c', %ld ms %ld us\n", c, dt/1000, dt%1000);
+        dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
+        printf("getchar Rope: '%c', %.2e sec\n", c, dt);
 
         t0 = clock();
         for(int i=0; i<1000; ++i)
@@ -68,12 +70,13 @@ int main(int argc, char *argv[])
             rope = rope_put(rope, N/2, random_string(20));
             rope = rope_remove(rope, N/2, N/2+20);
         }
-        dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("Insert / delete Rope: '%c', %ld ms %ld us\n", c, dt/1000, dt%1000);                
+        dt = (double) (clock() - t0) / CLOCKS_PER_SEC;
+        printf("Insert / delete Rope: '%c', %.2e sec\n", c, dt);
 
         free_rope(rope);
         UTIL_FREE(string);
     }
+
     return 0;
 }
 
