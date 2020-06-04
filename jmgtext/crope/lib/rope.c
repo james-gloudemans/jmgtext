@@ -229,7 +229,7 @@ Rope_p get_leaves(Rope_p rope)
                         if(node->left == NULL && node->right == NULL)
                         { // Found leaf
                             return node;
-                            case 1:;
+        /*case 1*/          case 1:;
                         }
                         node = node->right;
                     }
