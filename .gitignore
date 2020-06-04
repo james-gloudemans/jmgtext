@@ -9,6 +9,6 @@ jmgtext/crope/__pycache__/
 jmgtext/crope/lib/*.o
 jmgtext/crope/lib/_*
 jmgtext/crope/lib/*.so
-jmgtext/crope/lib/test
+jmgtext/crope/lib/rope_test
 .coverage
 htmlcov/
