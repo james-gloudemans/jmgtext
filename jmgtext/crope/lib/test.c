@@ -47,10 +47,6 @@ int main(int argc, char *argv[])
         t0 = clock();
         rope = new_rope(string);
         dt = 1000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("Build Rope: %ld sec %ld ms\n", dt/1000, dt%1000);
-
-        // printf("string: %s\n", string);
-        // printf("Rope:   %s\n", tostring(rope));
 
         char c;
         int len = strlen(string);
