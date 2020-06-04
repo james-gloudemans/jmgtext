@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <time.h>
 #include "util.h"
 #include "rope.h"
 
@@ -10,7 +9,6 @@
 Rope_p new_rope(char *text)
 {// Create a new Rope to represent text
     Rope_p result = UTIL_NEW(Rope);
-    clock_t t0, dt;
     if(text == NULL || strlen(text) <= DEFAULT_LEAF_LEN)
     {
         result->left = NULL;
@@ -27,19 +25,16 @@ Rope_p new_rope(char *text)
         UTIL_BOOL extra_chunk = strlen(text) % DEFAULT_LEAF_LEN != 0;
         int num_chunks = strlen(text) / DEFAULT_LEAF_LEN + extra_chunk;
         Rope_p *chunks = UTIL_malloc(num_chunks*sizeof(Rope_p));
-        t0 = clock();
         for(int i=0; i<num_chunks; ++i)
-        {// This loop is very slow
+        {
             char *next_str = UTIL_malloc(DEFAULT_LEAF_LEN*sizeof(char));
-            if(strlen(text) >= DEFAULT_LEAF_LEN)
-                memcpy(next_str, text, DEFAULT_LEAF_LEN);
-            else
+            if(i == num_chunks-1)
                 next_str = strcpy(next_str, text);
+            else
+                memcpy(next_str, text, DEFAULT_LEAF_LEN);                
             chunks[i] = new_rope(next_str);
             text += DEFAULT_LEAF_LEN;
         }
-        dt = 1000000 * (clock() - t0) / CLOCKS_PER_SEC;
-        printf("breaking long string: %ld ms %ld us\n", dt/1000, dt%1000);
         int cur_num_chunks = num_chunks;
         int i = 0;
         while(cur_num_chunks > 1)
