@@ -95,5 +95,5 @@ if __name__ == "__main__":
 
     string = "Hello, my name is Yimbo!"
     r = Rope(string)
-    print(r)
-    print(r + r)
+    s = r + r
+    print("".join(c for c in s))

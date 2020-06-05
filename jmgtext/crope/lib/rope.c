@@ -92,13 +92,9 @@ void free_rope_node(Rope_p rope)
 
 char *tostring(Rope_p rope)
 { // Convert the rope to char *.
-    if (rope->text != NULL)
-        return rope->text;
-    char *result = UTIL_malloc(rope->len * sizeof(char) + 1);
-    if (rope->left != NULL)
-        result = strcat(result, tostring(rope->left));
-    if (rope->right != NULL)
-        result = strcat(result, tostring(rope->right));
+    char *result = UTIL_malloc(rope_len(rope) * sizeof(char));
+    for (Rope_p node = get_leaves(rope); node != NULL; node = get_leaves(rope))
+        strcat(result, node->text);
     return result;
 }
 
