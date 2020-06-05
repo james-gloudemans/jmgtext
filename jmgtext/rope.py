@@ -90,10 +90,10 @@ class Rope(Sequence):
         """Return str(self)."""
         return "".join(self._words())
 
-    def __eq__(self, other: Stringy) -> bool:
+    def __eq__(self, other) -> bool:
         """Return self == other."""
         if not (isinstance(other, Rope) or isinstance(other, str)):
-            return False
+            return NotImplemented
         return str(self) == str(other)
 
     def __len__(self) -> int:
