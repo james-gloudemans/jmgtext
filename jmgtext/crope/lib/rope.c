@@ -94,7 +94,7 @@ char *tostring(Rope_p rope)
 { // Convert the rope to char *.
     if (rope->text != NULL)
         return rope->text;
-    char *result = UTIL_malloc(rope->len * sizeof(char));
+    char *result = UTIL_malloc(rope->len * sizeof(char) + 1);
     if (rope->left != NULL)
         result = strcat(result, tostring(rope->left));
     if (rope->right != NULL)
