@@ -25,11 +25,11 @@ class Rope(Sequence):
         """Initialize a new Rope."""
         if crope is not None:
             # global_keydict[self] = crope
-            self._crope = crope
+            self._crope = lib.copy_rope_node(crope)
         else:
             if isinstance(s, Rope):
                 # global_keydict[self] = s._crope
-                self._crope = s._crope
+                self._crope = lib.copy_rope_node(s._crope)
             else:
                 if isinstance(s, str):
                     s = bytes(s, encoding="utf-8")
@@ -104,10 +104,10 @@ class Rope(Sequence):
 
 if __name__ == "__main__":
 
-    string = "Hello, my name is Yimbo!"
+    string = b"Hello, my name is Yimbo!"
     r = Rope(string)
+    s = r.put(1, "123")
+    string = string[:1] + b"123" + string[1:]
     print(r)
-    s = r.put(3, "123")
     print(s)
-    t = s.delete(3, 6)
-    print(t)
+    print(string)

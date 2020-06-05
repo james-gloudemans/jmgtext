@@ -38,6 +38,8 @@ def test_put(string=test_str):
     for i, _ in enumerate(string):
         new_text = text.put(i, "--")
         new_string = string[:i] + "--" + string[i:]
+        print(new_text)
+        print(new_string)
         assert new_text == new_string
         test_get(new_text)
 
@@ -57,9 +59,9 @@ def test_logic(string=test_str):
 
 if __name__ == "__main__":
     test_get()
-    test_concat()
-    test_put()
-    test_delete()
-    test_logic()
+    # test_concat()
+    # test_put()
+    # test_delete()
+    # test_logic()
 
     print("All tests passed!")

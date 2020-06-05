@@ -23,10 +23,11 @@ Rope_p new_rope(char *text)
     { // Break up long string
         UTIL_BOOL extra_chunk = strlen(text) % DEFAULT_LEAF_LEN != 0;
         int num_chunks = strlen(text) / DEFAULT_LEAF_LEN + extra_chunk;
-        Rope_p *chunks = UTIL_malloc(num_chunks * sizeof(Rope_p));
+        Rope_p *chunks = (Rope_p *)UTIL_malloc(num_chunks * sizeof(Rope_p));
         for (int i = 0; i < num_chunks; ++i)
         {
-            char *next_str = UTIL_malloc(DEFAULT_LEAF_LEN * sizeof(char));
+            char *next_str = (char *)UTIL_malloc((DEFAULT_LEAF_LEN + 1) * sizeof(char));
+            next_str[0] = '\0';
             if (i == num_chunks - 1)
                 next_str = strcpy(next_str, text);
             else
@@ -92,7 +93,9 @@ void free_rope_node(Rope_p rope)
 
 char *tostring(Rope_p rope)
 { // Convert the rope to char *.
-    char *result = UTIL_malloc((rope_len(rope) + 1) * sizeof(char));
+    if (is_rope_empty(rope))
+        return "";
+    char *result = (char *)UTIL_malloc((rope_len(rope) + 1) * sizeof(char));
     result[0] = '\0';
     for (Rope_p node = get_leaves(rope); node != NULL; node = get_leaves(rope))
         strcat(result, node->text);
@@ -172,10 +175,12 @@ Rope_tuple_p rope_cut(Rope_p rope, const int i)
         return &(Rope_tuple){left_cut, right_cut};
     }
 
-    char *left_text = UTIL_malloc(i + 2);
-    char *right_text = UTIL_malloc(rope->len - i);
+    char *left_text = (char *)UTIL_malloc(i + 1);
+    char *right_text = (char *)UTIL_malloc(rope->len - i + 1);
     left_text = strncpy(left_text, rope->text, i);
-    right_text = strncpy(right_text, &(rope->text[i + 1]), rope->len - i);
+    left_text[i] = '\0';
+    right_text = strncpy(right_text, &(rope->text[i]), rope->len - i);
+    right_text[rope->len - i] = '\0';
     left_cut = new_rope(left_text);
     right_cut = new_rope(right_text);
     return &(Rope_tuple){left_cut, right_cut};
@@ -240,7 +245,7 @@ Rope_p rope_balance(Rope_p rope)
 { // Return a balanced version of rope, see 'Ropes: an alternative to strings' for details.
     Rope_p result = NULL;
     int numslots = _fib_n_gt(rope->len);
-    Rope_p *slots = UTIL_malloc(numslots * sizeof(Rope_p));
+    Rope_p *slots = (Rope_p *)UTIL_malloc(numslots * sizeof(Rope_p));
     for (int i = 0; i < numslots; ++i)
         slots[i] = NULL;
     int slot;
