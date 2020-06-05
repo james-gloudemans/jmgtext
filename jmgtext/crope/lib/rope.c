@@ -30,7 +30,7 @@ Rope_p new_rope(char *text)
             if (i == num_chunks - 1)
                 next_str = strcpy(next_str, text);
             else
-                memcpy(next_str, text, DEFAULT_LEAF_LEN);
+                strncpy(next_str, text, DEFAULT_LEAF_LEN);
             chunks[i] = new_rope(next_str);
             text += DEFAULT_LEAF_LEN;
         }
@@ -92,7 +92,8 @@ void free_rope_node(Rope_p rope)
 
 char *tostring(Rope_p rope)
 { // Convert the rope to char *.
-    char *result = UTIL_malloc(rope_len(rope) * sizeof(char));
+    char *result = UTIL_malloc((rope_len(rope) + 1) * sizeof(char));
+    result[0] = '\0';
     for (Rope_p node = get_leaves(rope); node != NULL; node = get_leaves(rope))
         strcat(result, node->text);
     return result;
