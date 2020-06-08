@@ -11,8 +11,6 @@ from lib._cffi_rope import ffi, lib
 # Type aliases
 Stringy = Union[str, bytes, "Rope"]
 
-# global_keydict: weakref.WeakKeyDictionary = weakref.WeakKeyDictionary()
-
 
 class Rope(Sequence):
     """
@@ -24,16 +22,13 @@ class Rope(Sequence):
     def __init__(self, s: Stringy = b"", *, crope=None) -> None:
         """Initialize a new Rope."""
         if crope is not None:
-            # global_keydict[self] = crope
             self._crope = lib.copy_rope_node(crope)
         else:
             if isinstance(s, Rope):
-                # global_keydict[self] = s._crope
                 self._crope = lib.copy_rope_node(s._crope)
             else:
                 if isinstance(s, str):
                     s = bytes(s, encoding="utf-8")
-                # global_keydict[self] = lib.new_rope(s)
                 self._crope = lib.new_rope(s)
 
     def __repr__(self) -> str:
@@ -104,10 +99,38 @@ class Rope(Sequence):
 
 if __name__ == "__main__":
 
-    string = b"Hello, my name is Yimbo!"
-    r = Rope(string)
-    s = r.put(1, "123")
-    string = string[:1] + b"123" + string[1:]
-    print(r)
-    print(s)
-    print(string)
+    import string
+    import random
+    from jmgtext.timer import Timer
+
+    def random_string(length: int) -> str:
+        """Return random string of specified length."""
+        return "".join(random.choice(string.ascii_letters) for _ in range(length))
+
+    for N in [10 ** n for n in range(3, 9)]:
+        print(f"N = {N:.0e}")
+        with Timer(name="Build string"):
+            long_string = random_string(N)
+        with Timer(name="Build rope"):
+            long_rope = Rope(long_string)
+
+        with Timer(name="Get char from rope"):
+            for _ in range(100):
+                c = long_rope[random.choice(range(N))]
+
+        with Timer(name="Get char from string"):
+            for _ in range(100):
+                c = long_string[random.choice(range(N))]
+
+        s = random_string(100)
+        with Timer(name="Insert / delete rope"):
+            for _ in range(100):
+                new_rope = long_rope.put(N // 2, s)
+                new_rope = new_rope.delete(N // 2, N // 2 + 10)
+
+        with Timer(name="Insert / delete string"):
+            for _ in range(100):
+                new_string = "".join((long_string[: N // 2], s, long_string[N // 2 :]))
+                new_string = new_string[: N // 2] + new_string[N // 2 + 10 :]
+
+        print("----------------------")
