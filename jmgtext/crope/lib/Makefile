@@ -6,7 +6,7 @@ librope.so: rope.o util.o
 	gcc -shared $^ -o $@
 
 libpystr.so: pystr.o util.o
-	gcc -shared $^ -o $@
+	gcc -shared $^ -o $@ -lbsd
 
 %.o: %.c
 	gcc -c -Wall -Werror -fpic -I . $^
