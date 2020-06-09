@@ -1,7 +1,7 @@
 """pystr.py: Python + cffi wrapper for C string."""
 # Standard Library
 from collections.abc import Sequence
-from typing import Iterator
+from typing import Iterator, Union
 
 # Local imports
 from lib._cffi_pystr import ffi, lib
@@ -35,10 +35,15 @@ class Pystr(Sequence):
         """Return len(self)."""
         return lib.str_len(self._str)
 
-    def __getitem__(self, i) -> str:
+    def __getitem__(self, i) -> Union[str, "Pystr"]:
         """Return self[i]."""
         if isinstance(i, int):
             return ffi.string(lib.str_getchar(self._str, i)).decode(encoding="utf-8")
+        if isinstance(i, slice):
+            result_txt = lib.str_substr(self._str, i.start, i.stop)
+            result = Pystr()
+            result._str = result_txt
+            return result
         else:
             raise NotImplementedError
 
@@ -50,9 +55,52 @@ class Pystr(Sequence):
         """del self."""
         lib.free_str(self._str)
 
+    def __contains__(self, s: object) -> bool:
+        """Return s in self."""
+        if not (isinstance(s, str) and len(s) == 1):
+            raise ValueError("Can only test for membership in Pystr with chars.")
+        result = lib.str_contains(self._str, bytes(s, encoding="utf-8"))
+        return result == b"\x01"
+
+    def __add__(self, other) -> "Pystr":
+        """Return self + other."""
+        if isinstance(other, str) or isinstance(other, bytes):
+            other = Pystr(other)
+        if not isinstance(other, Pystr):
+            raise TypeError("Can only add string-like types to Pystr.")
+        result = Pystr()
+        result._str = lib.str_concat(self._str, other._str)
+        return result
+
+    def __iadd__(self, other) -> "Pystr":
+        """Set self to self + other."""
+        return self + other
+
+    def __radd__(self, other) -> "Pystr":
+        """Return other + self."""
+        if isinstance(other, str) or isinstance(other, bytes):
+            other = Pystr(other)
+        if not isinstance(other, Pystr):
+            raise TypeError("Can only add string-like types to Pystr.")
+        result = Pystr()
+        result._str = lib.str_concat(other._str, self._str)
+        return result
+
+    def __mul__(self, n: int) -> "Pystr":
+        """Return self * n."""
+        result = Pystr()
+        result._str = lib.str_dupe(self._str, n)
+        return result
+
+    def __imul__(self, n: int) -> "Pystr":
+        """Set self to self * n."""
+        return self * n
+
+    def __rmul__(self, n: int) -> "Pystr":
+        """Return n * self."""
+        return self * n
+
 
 if __name__ == "__main__":
     s = Pystr("Hello my name is Yimbo!")
-    for c in s:
-        print(c, end="")
-    print()
+    print(3 * s)
