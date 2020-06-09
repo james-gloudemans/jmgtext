@@ -28,6 +28,10 @@ copy_str(pystr str);
 int
 str_len(pystr str);
 
+// Return a pointer to the text in the PyString.
+char *
+get_str(pystr str);
+
 // Is the PyString empty?
 UTIL_BOOL
 is_str_empty(pystr str);
