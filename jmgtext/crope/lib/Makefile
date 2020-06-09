@@ -1,8 +1,11 @@
-all: test rope
+all: test rope pystr
 
 remake: clean all
 
 librope.so: rope.o util.o
+	gcc -shared $^ -o $@
+
+libpystr.so: pystr.o util.o
 	gcc -shared $^ -o $@
 
 %.o: %.c
@@ -13,6 +16,9 @@ test: test.o util.o rope.o pystr.o
 
 rope: librope.so
 	./build_rope.py
+
+pystr: libpystr.so
+	./build_pystr.py
 
 clean:
 	rm -f rope_test *.o *.so _cffi_rope.c
