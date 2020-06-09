@@ -8,8 +8,8 @@ librope.so: rope.o util.o
 %.o: %.c
 	gcc -c -Wall -Werror -fpic -I . $^
 
-test: test.o util.o rope.o
-	gcc -o rope_test test.o util.o rope.o -lm
+test: test.o util.o rope.o pystr.o
+	gcc -o rope_test test.o util.o rope.o pystr.o -lm -lbsd
 
 rope: librope.so
 	./build_rope.py

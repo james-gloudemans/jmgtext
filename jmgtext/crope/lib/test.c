@@ -5,7 +5,8 @@
 #include <test.h>
 #include <rope.h>
 #include <util.h>
-#include <string.h>
+#include <bsd/string.h>
+#include <pystr.h>
 
 char *random_string(int n)
 { // Return a random string of letters of length n
@@ -34,65 +35,84 @@ int main(int argc, char *argv[])
     // put = rope_put(rope, 1, "123");
     // printf("%s\n", tostring(put));
 
-    char *string;
-    Rope_p rope;
-    clock_t t0;
-    double dt;
-    for (int p = 6; p < 10; ++p)
-    {
-        int N = pow(10, p);
-        printf("For N = 10^%d\n", p);
+    // char *string;
+    // Rope_p rope;
+    // clock_t t0;
+    // double dt;
+    // for (int p = 6; p < 10; ++p)
+    // {
+    //     int N = pow(10, p);
+    //     printf("For N = 10^%d\n", p);
 
-        t0 = clock();
-        string = random_string(N);
-        dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
-        printf("Build string: %.2e\n", dt);
+    //     t0 = clock();
+    //     string = random_string(N);
+    //     dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
+    //     printf("Build string: %.2e\n", dt);
 
-        t0 = clock();
-        rope = new_rope(string);
-        dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
-        printf("Build rope: %.2e sec\n", dt);
+    //     t0 = clock();
+    //     rope = new_rope(string);
+    //     dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
+    //     printf("Build rope: %.2e sec\n", dt);
 
-        char c;
-        int len = strlen(string);
-        t0 = clock();
-        for (int i = 0; i < 1000; ++i)
-            c = string[rand() % len];
-        dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
-        printf("getchar string: '%c', %.2e sec\n", c, dt);
+    //     char c;
+    //     int len = strlen(string);
+    //     t0 = clock();
+    //     for (int i = 0; i < 1000; ++i)
+    //         c = string[rand() % len];
+    //     dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
+    //     printf("getchar string: '%c', %.2e sec\n", c, dt);
 
-        t0 = clock();
-        for (int i = 0; i < 1000; ++i)
-            c = rope_getchar(rope, rand() % len);
-        dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
-        printf("getchar Rope: '%c', %.2e sec\n", c, dt);
+    //     t0 = clock();
+    //     for (int i = 0; i < 1000; ++i)
+    //         c = rope_getchar(rope, rand() % len);
+    //     dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
+    //     printf("getchar Rope: '%c', %.2e sec\n", c, dt);
 
-        int ins_len = 20;
-        t0 = clock();
-        for (int i = 0; i < 1000; ++i)
-        {
+    //     int ins_len = 20;
+    //     t0 = clock();
+    //     for (int i = 0; i < 1000; ++i)
+    //     {
 
-            string = (char *)UTIL_realloc(string, (N + ins_len + 1) * sizeof(char));
-            strcpy(string + N / 2 + ins_len, string + N / 2);
-            strcpy(string + N / 2, random_string(20));
-            strcpy(string + N / 2, string + N / 2 + ins_len);
-            string = (char *)UTIL_realloc(string, (N + 1) * sizeof(char));
-        }
-        dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
-        printf("Insert / delete string: %.2e sec \n", dt);
+    //         string = (char *)UTIL_realloc(string, (N + ins_len + 1) * sizeof(char));
+    //         strcpy(string + N / 2 + ins_len, string + N / 2);
+    //         strcpy(string + N / 2, random_string(20));
+    //         strcpy(string + N / 2, string + N / 2 + ins_len);
+    //         string = (char *)UTIL_realloc(string, (N + 1) * sizeof(char));
+    //     }
+    //     dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
+    //     printf("Insert / delete string: %.2e sec \n", dt);
 
-        t0 = clock();
-        for (int i = 0; i < 1000; ++i)
-        {
-            rope = rope_put(rope, N / 2, random_string(20));
-            rope = rope_remove(rope, N / 2, N / 2 + 20);
-        }
-        dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
-        printf("Insert / delete Rope: %.2e sec\n", dt);
+    //     t0 = clock();
+    //     for (int i = 0; i < 1000; ++i)
+    //     {
+    //         rope = rope_put(rope, N / 2, random_string(20));
+    //         rope = rope_remove(rope, N / 2, N / 2 + 20);
+    //     }
+    //     dt = (double)(clock() - t0) / CLOCKS_PER_SEC;
+    //     printf("Insert / delete Rope: %.2e sec\n", dt);
 
-        free_rope(rope);
-        UTIL_FREE(string);
-    }
+    //     free_rope(rope);
+    //     UTIL_FREE(string);
+    // }
 
+    pystr str = new_str("Hello world my name is Yimbo!");
+    printf("Original: |%s|\n", str->txt);
+    printf("Length: %d\n", str_len(str));
+    printf("Iterating: |");
+    for(int i=0; i<str_len(str); ++i)
+        printf("%c", str_getchar(str, i));
+    printf("|\n");
+    printf("3->7: |%s|\n", str_substr(str, 3, 7)->txt);
+    printf("contains H: %d\n", str_contains(str, 'H'));
+    printf("contains A: %d\n", str_contains(str, 'A'));
+    printf("str x 2: |%s|\n", str_concat(str, str)->txt);
+    printf("str x 3: |%s|\n", str_dupe(str, 3)->txt);
+    printf("'123' at 1: |%s|\n", str_put(str, 1, new_str("123"))->txt);
+    printf("'123' at 0: |%s|\n", str_put(str, 0, new_str("123"))->txt);
+    printf("'123' at end: |%s|\n", str_put(str, str_len(str), new_str("123"))->txt);
+    printf("cut 1->4: |%s|\n", str_remove(str, 1, 4)->txt);
+    printf("cut 0->4: |%s|\n", str_remove(str, 0, 4)->txt);
+    printf("cut 4->end: |%s|\n", str_remove(str, 4, str_len(str))->txt);
+    free_str(str);
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <util.h>
+#include <bsd/string.h>
 
 void *UTIL_malloc(size_t size)
 {
@@ -32,4 +33,12 @@ void UTIL_free(void *mem)
 {
     UTIL_ASSERT(mem != NULL);
     free(mem);
+}
+
+char *UTIL_new_str(char *str)
+{
+    size_t str_len = strlen(str) + 1;
+    char *result = (char *) UTIL_malloc(str_len);
+    strlcpy(result, str, str_len);
+    return result;
 }
