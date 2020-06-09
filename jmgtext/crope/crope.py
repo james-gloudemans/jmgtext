@@ -1,8 +1,6 @@
 """crope.py: Python + cffi wrapper for C rope."""
 # Standard Library
 from collections.abc import Sequence
-
-# import weakref
 from typing import Iterator, Union
 
 # Local imports
