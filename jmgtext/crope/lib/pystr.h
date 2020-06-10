@@ -12,6 +12,9 @@ typedef struct PyString
 // Create a new PyString from char *.
 pystr new_str(char *init);
 
+// Create a new PyString from char * with given length
+pystr new_str_len(char *init, size_t len);
+
 // Destroy the PyString.
 void free_str(pystr str);
 

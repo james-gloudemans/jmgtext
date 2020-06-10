@@ -40,7 +40,9 @@ class Pystr(Sequence):
         if isinstance(i, int):
             return ffi.string(lib.str_getchar(self._str, i)).decode(encoding="utf-8")
         if isinstance(i, slice):
-            result_txt = lib.str_substr(self._str, i.start, i.stop)
+            start = i.start or 0
+            stop = i.stop or len(self)
+            result_txt = lib.str_substr(self._str, start, stop)
             result = Pystr()
             result._str = result_txt
             return result
@@ -100,7 +102,32 @@ class Pystr(Sequence):
         """Return n * self."""
         return self * n
 
+    def put(self, s, i: int) -> "Pystr":
+        """Return copy of self with s inserted at position i."""
+        if isinstance(s, str) or isinstance(s, bytes):
+            s = Pystr(s)
+        if not isinstance(s, Pystr):
+            raise TypeError("Can only insert string-like objects into Pystr")
+        result = Pystr()
+        result._str = lib.str_put(self._str, i, s._str)
+        return result
+
 
 if __name__ == "__main__":
     s = Pystr("Hello my name is Yimbo!")
-    print(3 * s)
+    t = Pystr("123")
+    print(len(s))
+    print(len(t))
+    print("Original: ", end="")
+    for c in s:
+        print(c, end="")
+    print()
+    print(f"3->7: {str(s[3:7])}")
+    print(f"0->3: {str(s[:3])}")
+    print("H in s: " + str("H" in s))
+    print("A in s: " + str("A" in s))
+    print(f"s x 2: {str(2*s)}")
+    print(f"s + t: {str(s+t)}")
+    print(f"'123' at 1: {str(s.put('123', 1))}")
+    print(f"'123' at 0: {str(s.put('123', 0))}")
+    print(f"'123' at end: {str(s.put('123', len(s)))}")
