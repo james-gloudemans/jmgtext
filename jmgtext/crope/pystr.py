@@ -109,7 +109,9 @@ class Pystr(Sequence):
         if not isinstance(s, Pystr):
             raise TypeError("Can only insert string-like objects into Pystr")
         result = Pystr()
-        result._str = lib.str_put(self._str, i, s._str)
+        result._str = lib.str_put(
+            self._str, i, s._str
+        )  # Does s._str get garbage collected after this?
         return result
 
 
@@ -129,5 +131,5 @@ if __name__ == "__main__":
     print(f"s x 2: {str(2*s)}")
     print(f"s + t: {str(s+t)}")
     print(f"'123' at 1: {str(s.put('123', 1))}")
-    print(f"'123' at 0: {str(s.put('123', 0))}")
-    print(f"'123' at end: {str(s.put('123', len(s)))}")
+    # print(f"'123' at 0: {str(s.put('123', 0))}")
+    # print(f"'123' at end: {str(s.put('123', len(s)))}")
