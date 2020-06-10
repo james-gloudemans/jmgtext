@@ -115,6 +115,11 @@ pystr str_put(pystr str, const int i, pystr ins_str)
     return new_str_len(result_txt, new_len);
 }
 
+pystr chars_put(pystr str, const int i, char *ins_str)
+{// Return the PyString with ins_str inserted at position i
+    return str_put(str, i, new_str(ins_str));
+}
+
 pystr str_remove(pystr str, const int i, const int j)
 { // Return the PyString with position i->j removed.
     UTIL_ASSERT(str != NULL && i < j && j <= str_len(str));

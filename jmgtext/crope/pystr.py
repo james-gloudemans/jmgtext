@@ -104,14 +104,14 @@ class Pystr(Sequence):
 
     def put(self, s, i: int) -> "Pystr":
         """Return copy of self with s inserted at position i."""
-        if isinstance(s, str) or isinstance(s, bytes):
-            s = Pystr(s)
-        if not isinstance(s, Pystr):
+        if isinstance(s, Pystr):
+            s = ffi.string(lib.get_str(s._str))
+        if isinstance(s, str):
+            s = bytes(s, encoding="utf-8")
+        if not isinstance(s, bytes):
             raise TypeError("Can only insert string-like objects into Pystr")
         result = Pystr()
-        result._str = lib.str_put(
-            self._str, i, s._str
-        )  # Does s._str get garbage collected after this?
+        result._str = lib.chars_put(self._str, i, s)
         return result
 
 
@@ -131,5 +131,5 @@ if __name__ == "__main__":
     print(f"s x 2: {str(2*s)}")
     print(f"s + t: {str(s+t)}")
     print(f"'123' at 1: {str(s.put('123', 1))}")
-    # print(f"'123' at 0: {str(s.put('123', 0))}")
-    # print(f"'123' at end: {str(s.put('123', len(s)))}")
+    print(f"'123' at 0: {str(s.put('123', 0))}")
+    print(f"'123' at end: {str(s.put('123', len(s)))}")

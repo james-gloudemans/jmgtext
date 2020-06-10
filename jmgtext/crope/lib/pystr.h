@@ -51,6 +51,9 @@ pystr str_dupe(pystr str, const int n);
 // Return the PyString with ins_str inserted at position i.
 pystr str_put(pystr str, const int i, pystr ins_str);
 
+// Return the PyString with ins_str inserted at position i
+pystr chars_put(pystr str, const int i, char *ins_str);
+
 // Return the PyString with position i->j removed.
 pystr str_remove(pystr str, const int i, const int j);
 
