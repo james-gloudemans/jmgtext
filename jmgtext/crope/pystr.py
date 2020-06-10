@@ -38,10 +38,10 @@ class Pystr(Sequence):
     def __getitem__(self, i) -> Union[str, "Pystr"]:
         """Return self[i]."""
         if isinstance(i, int):
-            return ffi.string(lib.str_getchar(self._str, i)).decode(encoding="utf-8")
+            return lib.str_getchar(self._str, i).decode(encoding="utf-8")
         if isinstance(i, slice):
-            start = i.start or 0
-            stop = i.stop or len(self)
+            start = i.start if i.start is not None else 0
+            stop = i.stop if i.stop is not None else len(self)
             result_txt = lib.str_substr(self._str, start, stop)
             result = Pystr()
             result._str = result_txt
@@ -102,7 +102,7 @@ class Pystr(Sequence):
         """Return n * self."""
         return self * n
 
-    def put(self, s, i: int) -> "Pystr":
+    def put(self, i: int, s) -> "Pystr":
         """Return copy of self with s inserted at position i."""
         if isinstance(s, Pystr):
             s = ffi.string(lib.get_str(s._str))
@@ -114,22 +114,46 @@ class Pystr(Sequence):
         result._str = lib.chars_put(self._str, i, s)
         return result
 
+    def remove(self, i: int, j: int) -> "Pystr":
+        """Return a copy of self with chars [i,j) removed."""
+        result = Pystr()
+        result._str = lib.str_remove(self._str, i, j)
+        return result
+
 
 if __name__ == "__main__":
-    s = Pystr("Hello my name is Yimbo!")
-    t = Pystr("123")
-    print(len(s))
-    print(len(t))
-    print("Original: ", end="")
-    for c in s:
-        print(c, end="")
-    print()
-    print(f"3->7: {str(s[3:7])}")
-    print(f"0->3: {str(s[:3])}")
-    print("H in s: " + str("H" in s))
-    print("A in s: " + str("A" in s))
-    print(f"s x 2: {str(2*s)}")
-    print(f"s + t: {str(s+t)}")
-    print(f"'123' at 1: {str(s.put('123', 1))}")
-    print(f"'123' at 0: {str(s.put('123', 0))}")
-    print(f"'123' at end: {str(s.put('123', len(s)))}")
+    import string
+    import random
+    from jmgtext.timer import Timer
+
+    def random_string(length: int) -> str:
+        """Return random string of specified length."""
+        return "".join(random.choice(string.ascii_letters) for _ in range(length))
+
+    for N in (10 ** n for n in range(3, 8)):
+        print(f"N = {N:.0e}")
+        with Timer(name="Build string"):
+            long_string = random_string(N)
+        with Timer(name="Build Pystr"):
+            long_pystr = Pystr(long_string)
+
+        with Timer(name="Get char from Pystr"):
+            for _ in range(100):
+                c = long_pystr[random.choice(range(N))]
+
+        with Timer(name="Get char from string"):
+            for _ in range(100):
+                c = long_string[random.choice(range(N))]
+
+        s = random_string(100)
+        with Timer(name="Insert / delete Pystr"):
+            for _ in range(100):
+                new_pystr = long_pystr.put(N // 2, s)
+                new_pystr = new_pystr.remove(N // 2, N // 2 + 100)
+
+        with Timer(name="Insert / delete string"):
+            for _ in range(100):
+                new_string = "".join((long_string[: N // 2], s, long_string[N // 2 :]))
+                new_string = new_string[: N // 2] + new_string[N // 2 + 100 :]
+
+        print("----------------------")

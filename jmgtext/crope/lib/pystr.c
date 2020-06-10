@@ -68,7 +68,8 @@ pystr str_substr(pystr str, const int i, const int j)
     UTIL_ASSERT(str != NULL && j > i && j < str_len(str));
     size_t new_len = j - i;
     char *new_txt = (char *)UTIL_malloc(new_len + 1);
-    strlcpy(new_txt, str->txt + i, new_len + 1);
+    new_txt[0] = '\0';
+    strlcat(new_txt, str->txt + i, new_len + 1);
     return new_str_len(new_txt, new_len);
 }
 
@@ -125,7 +126,8 @@ pystr str_remove(pystr str, const int i, const int j)
     UTIL_ASSERT(str != NULL && i < j && j <= str_len(str));
     size_t new_len = str_len(str) - (j - i);
     char *result_txt = (char *)UTIL_malloc(new_len + 1);
-    strlcpy(result_txt, str->txt, i + 1);
+    result_txt[0] = '\0';
+    strlcat(result_txt, str->txt, i + 1);
     strlcat(result_txt, str->txt + j, new_len + 1);
     return new_str_len(result_txt, new_len);
 }
