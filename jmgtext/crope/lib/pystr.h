@@ -45,6 +45,9 @@ str_contains(pystr str, const char c);
 // Return the concatenation of PyStrings left and right.
 pystr str_concat(pystr left, pystr right);
 
+// Return the concatenation of PyString left with chars right
+pystr str_concat_str(pystr left, char *right);
+
 // Return the PyString duplicated n times.
 pystr str_dupe(pystr str, const int n);
 

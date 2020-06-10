@@ -2,9 +2,12 @@
 # Standard Library
 from collections.abc import Sequence
 from typing import Iterator, Union
+import weakref
 
 # Local imports
 from lib._cffi_pystr import ffi, lib
+
+global_weakdict: weakref.WeakKeyDictionary = weakref.WeakKeyDictionary()
 
 
 class Pystr(Sequence):
@@ -22,6 +25,7 @@ class Pystr(Sequence):
             self._str = lib.new_str(obj)
         else:
             raise NotImplementedError()
+        global_weakdict[self] = self._str
 
     def __repr__(self) -> str:
         """Return repr(self)."""
@@ -66,12 +70,15 @@ class Pystr(Sequence):
 
     def __add__(self, other) -> "Pystr":
         """Return self + other."""
-        if isinstance(other, str) or isinstance(other, bytes):
-            other = Pystr(other)
-        if not isinstance(other, Pystr):
-            raise TypeError("Can only add string-like types to Pystr.")
         result = Pystr()
-        result._str = lib.str_concat(self._str, other._str)
+        if isinstance(other, str):
+            result._str = lib.str_concat_str(self._str, bytes(other, encoding="utf-8"))
+        elif isinstance(other, bytes):
+            result._str = lib.str_concat_str(self._str, other)
+        elif isinstance(other, Pystr):
+            result._str = lib.str_concat(self._str, other._str)
+        else:
+            raise TypeError("Can only add string-like types to Pystr.")
         return result
 
     def __iadd__(self, other) -> "Pystr":
@@ -80,12 +87,15 @@ class Pystr(Sequence):
 
     def __radd__(self, other) -> "Pystr":
         """Return other + self."""
-        if isinstance(other, str) or isinstance(other, bytes):
-            other = Pystr(other)
-        if not isinstance(other, Pystr):
-            raise TypeError("Can only add string-like types to Pystr.")
         result = Pystr()
-        result._str = lib.str_concat(other._str, self._str)
+        if isinstance(other, str):
+            result._str = lib.str_concat_str(bytes(other, encoding="utf-8"), self._str)
+        elif isinstance(other, bytes):
+            result._str = lib.str_concat_str(other, self._str)
+        elif isinstance(other, Pystr):
+            result._str = lib.str_concat(other._str, self._str)
+        else:
+            raise TypeError("Can only add string-like types to Pystr.")
         return result
 
     def __mul__(self, n: int) -> "Pystr":
@@ -101,6 +111,10 @@ class Pystr(Sequence):
     def __rmul__(self, n: int) -> "Pystr":
         """Return n * self."""
         return self * n
+
+    def __hash__(self) -> int:
+        """Return hash(self)."""
+        return hash(str(self))
 
     def put(self, i: int, s) -> "Pystr":
         """Return copy of self with s inserted at position i."""
@@ -148,8 +162,10 @@ if __name__ == "__main__":
         s = random_string(100)
         with Timer(name="Insert / delete Pystr"):
             for _ in range(100):
-                new_pystr = long_pystr.put(N // 2, s)
-                new_pystr = new_pystr.remove(N // 2, N // 2 + 100)
+                new_pystr = long_pystr[: N // 2] + s + long_pystr[N // 2 :]
+                new_pystr = new_pystr[: N // 2] + new_pystr[N // 2 + 100 :]
+                # new_pystr = long_pystr.put(N // 2, s)
+                # new_pystr = new_pystr.remove(N // 2, N // 2 + 100)
 
         with Timer(name="Insert / delete string"):
             for _ in range(100):

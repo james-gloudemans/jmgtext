@@ -65,7 +65,7 @@ char str_getchar(pystr str, const int i)
 
 pystr str_substr(pystr str, const int i, const int j)
 { // Return the substring from position i to j.
-    UTIL_ASSERT(str != NULL && j > i && j < str_len(str));
+    UTIL_ASSERT(str != NULL && j > i && j <= str_len(str));
     size_t new_len = j - i;
     char *new_txt = (char *)UTIL_malloc(new_len + 1);
     new_txt[0] = '\0';
@@ -92,6 +92,11 @@ pystr str_concat(pystr left, pystr right)
     size_t new_len = str_len(left) + str_len(right);
     strlcat(result, UTIL_NEW_STR_IF(right->txt), new_len + 1);
     return new_str_len(result, new_len);
+}
+
+pystr str_concat_str(pystr left, char *right)
+{ // Return the concatenation of PyString left with chars right
+    return str_concat(left, new_str(right));
 }
 
 pystr str_dupe(pystr str, const int n)
