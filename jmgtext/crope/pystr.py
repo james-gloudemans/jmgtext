@@ -59,6 +59,7 @@ class Pystr(Sequence):
 
     def __del__(self) -> None:
         """del self."""
+        print(f"del |{self}|")
         lib.free_str(self._str)
 
     def __contains__(self, s: object) -> bool:
@@ -144,32 +145,43 @@ if __name__ == "__main__":
         """Return random string of specified length."""
         return "".join(random.choice(string.ascii_letters) for _ in range(length))
 
-    for N in (10 ** n for n in range(3, 8)):
-        print(f"N = {N:.0e}")
-        with Timer(name="Build string"):
-            long_string = random_string(N)
-        with Timer(name="Build Pystr"):
-            long_pystr = Pystr(long_string)
+    # for N in (10 ** n for n in range(3, 8)):
+    #     print(f"N = {N:.0e}")
+    #     with Timer(name="Build string"):
+    #         long_string = random_string(N)
+    #     with Timer(name="Build Pystr"):
+    #         long_pystr = Pystr(long_string)
 
-        with Timer(name="Get char from Pystr"):
-            for _ in range(100):
-                c = long_pystr[random.choice(range(N))]
+    #     with Timer(name="Get char from Pystr"):
+    #         for _ in range(100):
+    #             c = long_pystr[random.choice(range(N))]
 
-        with Timer(name="Get char from string"):
-            for _ in range(100):
-                c = long_string[random.choice(range(N))]
+    #     with Timer(name="Get char from string"):
+    #         for _ in range(100):
+    #             c = long_string[random.choice(range(N))]
 
-        s = random_string(100)
-        with Timer(name="Insert / delete Pystr"):
-            for _ in range(100):
-                new_pystr = long_pystr[: N // 2] + s + long_pystr[N // 2 :]
-                new_pystr = new_pystr[: N // 2] + new_pystr[N // 2 + 100 :]
-                # new_pystr = long_pystr.put(N // 2, s)
-                # new_pystr = new_pystr.remove(N // 2, N // 2 + 100)
+    #     s = random_string(100)
+    #     with Timer(name="Insert / delete Pystr"):
+    #         for _ in range(100):
+    #             new_pystr = long_pystr[: N // 2] + s + long_pystr[N // 2 :]
+    #             new_pystr = new_pystr[: N // 2] + new_pystr[N // 2 + 100 :]
+    #             # new_pystr = long_pystr.put(N // 2, s)
+    #             # new_pystr = new_pystr.remove(N // 2, N // 2 + 100)
 
-        with Timer(name="Insert / delete string"):
-            for _ in range(100):
-                new_string = "".join((long_string[: N // 2], s, long_string[N // 2 :]))
-                new_string = new_string[: N // 2] + new_string[N // 2 + 100 :]
+    #     with Timer(name="Insert / delete string"):
+    #         for _ in range(100):
+    #             new_string = "".join((long_string[: N // 2], s, long_string[N // 2 :]))
+    #             new_string = new_string[: N // 2] + new_string[N // 2 + 100 :]
 
-        print("----------------------")
+    #     del long_pystr
+    #     del new_pystr
+    #     print("----------------------")
+
+    for i in range(10):
+        print(i)
+        s = Pystr("Hello I am Yimbo.")
+        N = len(s)
+        ins = "0123456789"
+        ns = s[: N // 2] + ins + s[N // 2 :]
+        ns = ns[: N // 2] + ns[N // 2 + 10 :]
+        print(len(s))
