@@ -25,9 +25,11 @@ pystr new_str_len(char *init, size_t len)
 
 void free_str(pystr str)
 { // Destroy the PyString.
+    // printf("Freeing: |%s|\n", str->txt);
     if (str->txt != NULL)
         UTIL_FREE(str->txt);
     UTIL_FREE(str);
+    // printf("Success.\n");
 }
 
 pystr copy_str(pystr str)
@@ -122,7 +124,7 @@ pystr str_put(pystr str, const int i, pystr ins_str)
 }
 
 pystr chars_put(pystr str, const int i, char *ins_str)
-{// Return the PyString with ins_str inserted at position i
+{ // Return the PyString with ins_str inserted at position i
     return str_put(str, i, new_str(ins_str));
 }
 

@@ -22,19 +22,6 @@ char *random_string(int n)
 
 int main(int argc, char *argv[])
 {
-    // char *text = "Hello, my name is Jimbo!";
-    // Rope_p rope = NULL;
-    // for (int i = 0; i < strlen(text); ++i)
-    // {
-    //     char c[2] = {text[i], '\0'};
-    //     Rope_p rc = new_rope(c);
-    //     rope = rope_concat(rope, rc);
-    // }
-    // rope = rope_balance(rope);
-    // Rope_p put;
-    // put = rope_put(rope, 1, "123");
-    // printf("%s\n", tostring(put));
-
     // char *string;
     // Rope_p rope;
     // clock_t t0;
@@ -95,24 +82,9 @@ int main(int argc, char *argv[])
     //     UTIL_FREE(string);
     // }
 
-    pystr str = new_str("Hello world my name is Yimbo!");
-    printf("Original: |%s|\n", str->txt);
-    printf("Length: %d\n", str_len(str));
-    printf("Iterating: |");
-    for(int i=0; i<str_len(str); ++i)
-        printf("%c", str_getchar(str, i));
-    printf("|\n");
-    printf("3->7: |%s|\n", str_substr(str, 3, 7)->txt);
-    printf("contains H: %d\n", str_contains(str, 'H'));
-    printf("contains A: %d\n", str_contains(str, 'A'));
-    printf("str x 2: |%s|\n", str_concat(str, str)->txt);
-    printf("str x 3: |%s|\n", str_dupe(str, 3)->txt);
-    printf("'123' at 1: |%s|\n", str_put(str, 1, new_str("123"))->txt);
-    printf("'123' at 0: |%s|\n", str_put(str, 0, new_str("123"))->txt);
-    printf("'123' at end: |%s|\n", str_put(str, str_len(str), new_str("123"))->txt);
-    printf("cut 1->4: |%s|\n", str_remove(str, 1, 4)->txt);
-    printf("cut 0->4: |%s|\n", str_remove(str, 0, 4)->txt);
-    printf("cut 4->end: |%s|\n", str_remove(str, 4, str_len(str))->txt);
-    free_str(str);
+    char *str = "Hola soy Yimbo.";
+    char *str_cpy = UTIL_NEW_STR_IF(str);
+    for (int i = 0; i < strlen(str_cpy) + 1; ++i)
+        printf("%d\n", str_cpy[i]);
     return 0;
 }

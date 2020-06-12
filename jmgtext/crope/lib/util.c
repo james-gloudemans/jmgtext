@@ -37,8 +37,8 @@ void UTIL_free(void *mem)
 
 char *UTIL_new_str(char *str)
 {
-    size_t str_len = strlen(str) + 1;
-    char *result = (char *) UTIL_malloc(str_len);
-    strlcpy(result, str, str_len);
+    size_t str_len = strlen(str);
+    char *result = (char *)UTIL_malloc(str_len + 1);
+    strlcpy(result, str, str_len + 1);
     return result;
 }

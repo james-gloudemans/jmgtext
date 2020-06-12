@@ -7,7 +7,7 @@ import weakref
 # Local imports
 from lib._cffi_pystr import ffi, lib
 
-global_weakdict: weakref.WeakKeyDictionary = weakref.WeakKeyDictionary()
+global_refset: set = set()
 
 
 class Pystr(Sequence):
@@ -25,7 +25,7 @@ class Pystr(Sequence):
             self._str = lib.new_str(obj)
         else:
             raise NotImplementedError()
-        global_weakdict[self] = self._str
+        global_refset.add(self._str)
 
     def __repr__(self) -> str:
         """Return repr(self)."""
@@ -49,6 +49,7 @@ class Pystr(Sequence):
             result_txt = lib.str_substr(self._str, start, stop)
             result = Pystr()
             result._str = result_txt
+            global_refset.add(result._str)
             return result
         else:
             raise NotImplementedError
@@ -59,8 +60,9 @@ class Pystr(Sequence):
 
     def __del__(self) -> None:
         """del self."""
-        print(f"del |{self}|")
+        # print(f"del {self}")
         lib.free_str(self._str)
+        global_refset.remove(self._str)
 
     def __contains__(self, s: object) -> bool:
         """Return s in self."""
@@ -80,6 +82,7 @@ class Pystr(Sequence):
             result._str = lib.str_concat(self._str, other._str)
         else:
             raise TypeError("Can only add string-like types to Pystr.")
+        global_refset.add(result._str)
         return result
 
     def __iadd__(self, other) -> "Pystr":
@@ -97,12 +100,14 @@ class Pystr(Sequence):
             result._str = lib.str_concat(other._str, self._str)
         else:
             raise TypeError("Can only add string-like types to Pystr.")
+        global_refset.add(result._str)
         return result
 
     def __mul__(self, n: int) -> "Pystr":
         """Return self * n."""
         result = Pystr()
         result._str = lib.str_dupe(self._str, n)
+        global_refset.add(result._str)
         return result
 
     def __imul__(self, n: int) -> "Pystr":
@@ -127,12 +132,14 @@ class Pystr(Sequence):
             raise TypeError("Can only insert string-like objects into Pystr")
         result = Pystr()
         result._str = lib.chars_put(self._str, i, s)
+        global_refset.add(result._str)
         return result
 
     def remove(self, i: int, j: int) -> "Pystr":
         """Return a copy of self with chars [i,j) removed."""
         result = Pystr()
         result._str = lib.str_remove(self._str, i, j)
+        global_refset.add(result._str)
         return result
 
 
@@ -173,15 +180,18 @@ if __name__ == "__main__":
     #             new_string = "".join((long_string[: N // 2], s, long_string[N // 2 :]))
     #             new_string = new_string[: N // 2] + new_string[N // 2 + 100 :]
 
-    #     del long_pystr
-    #     del new_pystr
-    #     print("----------------------")
+    # # del long_pystr
+    # # del new_pystr
+    # print("----------------------")
 
-    for i in range(10):
+    for i in range(3):
         print(i)
         s = Pystr("Hello I am Yimbo.")
         N = len(s)
-        ins = "0123456789"
+        ins = Pystr("0123456789")
         ns = s[: N // 2] + ins + s[N // 2 :]
-        ns = ns[: N // 2] + ns[N // 2 + 10 :]
-        print(len(s))
+        ns1 = ns[: N // 2] + ns[N // 2 + 10 :]
+        # del s
+        # del ns
+        # del ns1
+        # Idea: change all char *s to char []s??
